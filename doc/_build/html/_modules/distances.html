@@ -1,0 +1,223 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>distances &mdash; MD_Observables 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="MD_Observables 1.0.0 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">MD_Observables 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for distances</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    </span>
+<span class="sd">    Author:          Antonia Mey</span>
+<span class="sd">        </span>
+<span class="sd">    Email:           antonia.mey@fu-berlin.de     </span>
+<span class="sd">     </span>
+<span class="sd">    Date:            03.12.2013</span>
+<span class="sd">    </span>
+<span class="sd">    Version:         1.0.0 Beta</span>
+<span class="sd">    </span>
+<span class="sd">    #=============================================================================================\n</span>
+<span class="sd">    # COPYRIGHT NOTICE\n</span>
+<span class="sd">    #\n</span>
+<span class="sd">    # Written by Antonia Mey &lt;antonia.mey@fu-berlin.de&gt;\n</span>
+<span class="sd">    #</span>
+<span class="sd">    # This program is free software; you can redistribute it and/or modify it under the terms of\n</span>
+<span class="sd">    # the GNU General Public License as published by the Free Software Foundation; either version 2\n</span>
+<span class="sd">    # of the License, or (at your option) any later version.\n</span>
+<span class="sd">    #\n</span>
+<span class="sd">    # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;\n</span>
+<span class="sd">    # without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n</span>
+<span class="sd">    # See the GNU General Public License for more details.\n</span>
+<span class="sd">    # \n</span>
+<span class="sd">    # You should have received a copy of the GNU General Public License along with this program;\n</span>
+<span class="sd">    # if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,\n</span>
+<span class="sd">    # Boston, MA  02110-1301, USA.\n</span>
+<span class="sd">    #=============================================================================================\n</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="c">#================================</span>
+<span class="c">#Imports</span>
+<span class="c">#================================</span>
+<span class="kn">from</span> <span class="nn">MDAnalysis</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">MDAnalysis.analysis.distances</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+
+
+<span class="c">#=============================================================================================</span>
+<span class="c"># distances class definition</span>
+<span class="c">#=============================================================================================</span>
+
+<div class="viewcode-block" id="distances"><a class="viewcode-back" href="../code.html#distances.distances">[docs]</a><span class="k">class</span> <span class="nc">distances</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This class extracts distances of all kinds from a trajectory and topology file\n</span>
+<span class="sd">    prerequesit modules are: MDAnalysis</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Constructor, does not take any arguments</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">pass</span>
+    
+        
+<div class="viewcode-block" id="distances.returnCAlphaDistanceTrajectory"><a class="viewcode-back" href="../code.html#distances.distances.returnCAlphaDistanceTrajectory">[docs]</a>    <span class="k">def</span> <span class="nf">returnCAlphaDistanceTrajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_trajectoryFile</span><span class="p">,</span> <span class="n">_topologyFile</span><span class="p">,</span> <span class="n">skip</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;This function returns next to nearest neighbour c-alpha distances</span>
+<span class="sd">    </span>
+<span class="sd">        Args:</span>
+<span class="sd">           _trajectoryFile (str): trajectoryFilename.xtc</span>
+<span class="sd">           _topologyFile (str): topologyFilename.gro</span>
+<span class="sd">    </span>
+<span class="sd">        Returns:</span>
+<span class="sd">           arrayList  distances array for the whole trajectory [traj_length][num_c_alpha_distances]</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">        Useage</span>
+<span class="sd">    </span>
+<span class="sd">        &gt;&gt;&gt; distances = returnCAlphaDistances(_trajectoryFile=&#39;test.xtc&#39;, _topologyFile=&#39;test.gro&#39;)</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>  
+        <span class="n">universe</span> <span class="o">=</span> <span class="n">Universe</span><span class="p">(</span><span class="n">_topologyFile</span><span class="p">,</span><span class="n">_trajectoryFile</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&quot;Loading trajectory file </span><span class="si">%s</span><span class="s">&quot;</span><span class="o">%</span><span class="n">_trajectoryFile</span>
+        <span class="n">protein</span> <span class="o">=</span> <span class="n">universe</span><span class="o">.</span><span class="n">selectAtoms</span><span class="p">(</span><span class="s">&quot;protein&quot;</span><span class="p">)</span> <span class="c">#Selecting only protein atoms</span>
+        <span class="n">nframes</span> <span class="o">=</span> <span class="n">universe</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">numframes</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">calphas</span> <span class="o">=</span> <span class="n">universe</span><span class="o">.</span><span class="n">selectAtoms</span><span class="p">(</span><span class="s">&quot;name CA&quot;</span><span class="p">)</span>
+        <span class="n">atomnums</span> <span class="o">=</span> <span class="n">calphas</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">indices</span><span class="p">()</span>
+    
+        <span class="n">distance_selections</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">atomnums</span><span class="p">)):</span>
+            <span class="n">idist</span> <span class="o">=</span> <span class="n">universe</span><span class="o">.</span><span class="n">selectAtoms</span><span class="p">(</span><span class="s">&quot;bynum </span><span class="si">%i</span><span class="s">&quot;</span><span class="o">%</span><span class="n">atomnums</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+            <span class="n">distance_selections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idist</span><span class="p">)</span>
+        <span class="n">ndist</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">distance_selections</span><span class="p">)</span>
+
+        <span class="n">distanceListTrajectory</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c"># Loop over all frames:</span>
+        <span class="k">print</span> <span class="s">&quot;Loop over all frames...&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nframes</span><span class="p">):</span>
+            <span class="n">all_distances</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ndist</span><span class="o">-</span><span class="n">skip</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="n">skip</span><span class="p">,</span><span class="n">ndist</span><span class="p">):</span>
+                        <span class="n">result</span> <span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">distance_selections</span><span class="p">[</span><span class="n">k</span><span class="p">],</span><span class="n">distance_selections</span><span class="p">[</span><span class="n">l</span><span class="p">])</span>
+                        <span class="n">all_distances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                        
+            <span class="n">distanceListTrajectory</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">all_distances</span><span class="p">)</span>
+            <span class="n">universe</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+        <span class="k">print</span> <span class="s">&#39;distance Trajectory has been obtained.&#39;</span>
+        <span class="k">return</span> <span class="n">distanceListTrajectory</span>
+    </div>
+    <span class="k">def</span> <span class="nf">ReturnHeavyAtromDistanceTrajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&#39;this method is not implemented yet&#39;</span>
+        
+    <span class="k">def</span> <span class="nf">ReturnCustomDistances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&#39;this method is not implemented yet&#39;</span>
+    
+        
+<span class="c">#=============================================================================================</span>
+<span class="c"># MAIN AND TESTS</span>
+<span class="c">#=============================================================================================</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    
+    <span class="c">#tsting the methods</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s">&quot;Feature extractions from xtc files&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-f&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&#39;xtc inputfile&#39;</span><span class="p">);</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&#39;coordinate file in Gromacs .gro format&#39;</span><span class="p">);</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="n">topologyFile</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">c</span>
+    <span class="n">trajectoryFile</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">f</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">distances</span><span class="p">()</span>
+    <span class="n">d</span><span class="o">.</span><span class="n">thisIsAPublicMethod</span><span class="p">()</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">returnCAlphaDistanceTrajectory</span><span class="p">(</span><span class="n">trajectoryFile</span><span class="p">,</span> <span class="n">topologyFile</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">distances</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">MD_Observables 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Antonia Mey.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

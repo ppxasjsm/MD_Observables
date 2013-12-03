@@ -1,0 +1,163 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Auto Generated Documentation &mdash; MD_Observables 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="MD_Observables 1.0.0 documentation" href="index.html" />
+    <link rel="next" title="Project Summary" href="project.html" />
+    <link rel="prev" title="MD_Observables Tutorial" href="tutorial.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="project.html" title="Project Summary"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="MD_Observables Tutorial"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">MD_Observables 1.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-distances">
+<span id="auto-generated-documentation"></span><h1>Auto Generated Documentation<a class="headerlink" href="#module-distances" title="Permalink to this headline">¶</a></h1>
+<p>Author:          Antonia Mey</p>
+<p>Email:           <a class="reference external" href="mailto:antonia&#46;mey&#37;&#52;&#48;fu-berlin&#46;de">antonia<span>&#46;</span>mey<span>&#64;</span>fu-berlin<span>&#46;</span>de</a></p>
+<p>Date:            03.12.2013</p>
+<p>Version:         1.0.0 Beta</p>
+<p>#=============================================================================================</p>
+<p># COPYRIGHT NOTICE</p>
+<p>#</p>
+<p># Written by Antonia Mey &lt;<a class="reference external" href="mailto:antonia&#46;mey&#37;&#52;&#48;fu-berlin&#46;de">antonia<span>&#46;</span>mey<span>&#64;</span>fu-berlin<span>&#46;</span>de</a>&gt;</p>
+<p>#
+# This program is free software; you can redistribute it and/or modify it under the terms of</p>
+<p># the GNU General Public License as published by the Free Software Foundation; either version 2</p>
+<p># of the License, or (at your option) any later version.</p>
+<p>#</p>
+<p># This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;</p>
+<p># without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</p>
+<p># See the GNU General Public License for more details.</p>
+<p>#</p>
+<p># You should have received a copy of the GNU General Public License along with this program;</p>
+<p># if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,</p>
+<p># Boston, MA  02110-1301, USA.</p>
+<p>#=============================================================================================</p>
+<dl class="class">
+<dt id="distances.distances">
+<em class="property">class </em><tt class="descclassname">distances.</tt><tt class="descname">distances</tt><a class="reference internal" href="_modules/distances.html#distances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#distances.distances" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class extracts distances of all kinds from a trajectory and topology file</p>
+<p>prerequesit modules are: MDAnalysis</p>
+<dl class="method">
+<dt id="distances.distances.returnCAlphaDistanceTrajectory">
+<tt class="descname">returnCAlphaDistanceTrajectory</tt><big>(</big><em>_trajectoryFile</em>, <em>_topologyFile</em>, <em>skip=2</em><big>)</big><a class="reference internal" href="_modules/distances.html#distances.returnCAlphaDistanceTrajectory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#distances.distances.returnCAlphaDistanceTrajectory" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function returns next to nearest neighbour c-alpha distances</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>_trajectoryFile (str): trajectoryFilename.xtc
+_topologyFile (str): topologyFilename.gro</dd>
+<dt>Returns:</dt>
+<dd>arrayList  distances array for the whole trajectory [traj_length][num_c_alpha_distances]</dd>
+</dl>
+<p>Useage</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">distances</span> <span class="o">=</span> <span class="n">returnCAlphaDistances</span><span class="p">(</span><span class="n">_trajectoryFile</span><span class="o">=</span><span class="s">&#39;test.xtc&#39;</span><span class="p">,</span> <span class="n">_topologyFile</span><span class="o">=</span><span class="s">&#39;test.gro&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorial.html"
+                        title="previous chapter">MD_Observables Tutorial</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="project.html"
+                        title="next chapter">Project Summary</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/code.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="project.html" title="Project Summary"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="MD_Observables Tutorial"
+             >previous</a> |</li>
+        <li><a href="index.html">MD_Observables 1.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Antonia Mey.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
