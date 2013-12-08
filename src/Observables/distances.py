@@ -102,6 +102,10 @@ class distances:
         print 'distance Trajectory has been obtained.'
         return distanceListTrajectory
     
+    
+    def RetrunCAlphaDistanceTrajectoryParallel(self):
+        print 'this method has not been implemented yet'
+    
     def ReturnHeavyAtromDistanceTrajectory(self):
         print 'this method is not implemented yet'
         
