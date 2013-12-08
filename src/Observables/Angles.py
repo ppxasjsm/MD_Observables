@@ -37,6 +37,8 @@ from MDAnalysis import *
 from MDAnalysis.analysis.distances import *
 import numpy as np
 import argparse
+import os
+from MDAnalysis import collection
 
 class Angles:
     '''
@@ -99,28 +101,162 @@ class Angles:
         return dihedral
        
         
-    def getDihedralTrajectory(self):
-        print 'this method has not been implemented yet'
+    def getDihedralTrajectory(self,_structure, _trajectory, _atomSelectionArray, _stop=-1):
+        '''This function returns the dihedral angle between four specified atoms over the whole trajectory\n
+        The preferred input is in dcd format. Otherwise the first trajectory frame is missing\n
+        ToDo: fix issues with xtc input trajectory that dihedrals for all frames are computed.
+            
+        Args:
+           _trajectoryFile (str): trajectoryFilename.xtc/trajectoryFilename.dcd
+           _topologyFile (str): topologyFilename.gro
+           _atomSelectionArray(numpy array): list of 3 atom indices as in the structure file
+           _stop (int): Default =-1 (i.e. all frames)
+    
+        Returns:
+           dihedralTraj  trajectory containing dihedrals between the four atoms specified in the _atomSelectionArray
+    
+    
+        Useage:
+    
+        >>> dihedralTraj = getDihedralTrajectory(_trajectoryFile='test.xtc/dcd', _topologyFile='test.gro',atoms)
         
-    def getAngleTrajectory(self):
-        print 'this method has not been implemented yet'
+        '''  
+        
+        u = Universe(_structure,_trajectory)
+        
+        if self._extensionDcD(_trajectory):
+            collection.clear()
+            selectionString =self._generateSelectionString(_atomSelectionArray, "bynum ")
+            selection = u.selectAtoms(selectionString)
+            collection.addTimeseries(Timeseries.Dihedral(selection))
+            if _stop == -1:
+                _stop = u.trajectory.numframes-1
+            collection.compute(u.trajectory, stop=_stop)
+            return collection[0]
+           
+        
+               #else
+        else:
+            print 'Warning.....first frame is missing............................'
+            print 'You have not provided a dcd file, iterating through the trajectory will be slow. '
+            print 'For improved preformance please convert your input trajectory to dcd format.'
+            print 'Good luck with the compuatation'
+            frames = u.trajectory.numframes
+            dihedrals = []
+            u.trajectory.rewind()
+            for t in range(frames-1):
+               
+                selectionString =self._generateSelectionString(_atomSelectionArray, "bynum ")
+                selection = u.selectAtoms(selectionString)
+                dihedral = selection.dihedral()
+                dihedrals.append(dihedral)
+                u.trajectory.next()
+            selectionString =self._generateSelectionString(_atomSelectionArray, "bynum ")
+            selection = u.selectAtoms(selectionString)
+            dihedral = selection.dihedral()
+            dihedrals.append(dihedral)
+            dihedrals = np.array(dihedrals)
+            dihedrals = np.radians(dihedrals)
+            return dihedrals
+        
+    def getAngleTrajectory(self,_structure, _trajectory, _atomSelectionArray, _stop =-1):
+        '''This function returns the alangle between three specified atoms over the whole trajectory\n
+        The preferred input is in dcd format. Otherwise the first trajectory frame is missing\n
+        ToDo: fix issues with xtc input trajectory that angles for all frames are computed.
+            
+        Args:
+           _trajectoryFile (str): trajectoryFilename.xtc/trajectoryFilename.dcd
+           _topologyFile (str): topologyFilename.gro
+           _atomSelectionArray(numpy array): list of 3 atom indices as in the structure file
+           _stop (int): Default =-1 (i.e. all frames)
+    
+        Returns:
+           anglesTraj  trajectory containing angles between the three atoms specified in the _atomSelectionArray
+    
+    
+        Useage:
+    
+        >>> dihedralTraj = getDihedralTrajectory(_trajectoryFile='test.xtc/dcd', _topologyFile='test.gro',atoms)
+        
+        '''  
+        
+        #if filename is a dcd file use fast method
+        u = Universe(_structure,_trajectory)
+        
+        if self._extensionDcD(_trajectory):
+            collection.clear()
+            selectionString =self._generateSelectionString(_atomSelectionArray, "bynum ")
+            selection = u.selectAtoms(selectionString)
+            collection.addTimeseries(Timeseries.Angle(selection))
+            if _stop == -1:
+                _stop = u.trajectory.numframes-1
+            collection.compute(u.trajectory, stop=_stop)
+            return collection[0][0]
+            
+        
+        #else
+        else:
+            print 'Warning.......warning first frame is missing....................................'
+            print 'You have not provided a dcd file, iterating through the trajectory will be slow. '
+            print 'For improved preformance please convert your input trajectory to dcd format.'
+            print 'Good luck with the compuatation'
+            frames = u.trajectory.numframes-1
+            angles = []
+           
+            for t in range(frames):
+                
+                selectionString =self._generateSelectionString(_atomSelectionArray, "bynum ")
+                selection = u.selectAtoms(selectionString)
+                angle = selection.angle()
+                angles.append(angle)
+                u.trajectory.next()
+            selectionString =self._generateSelectionString(_atomSelectionArray, "bynum ")
+            selection = u.selectAtoms(selectionString)
+            angle = selection.angle()
+            angles.append(angle)
+            angles = np.array(angles)
+            angles = np.radians(angles)
+            return angles
+                
         
     def _generateSelectionString(self, selections, selectionType):
-        print selections
+  
         finalSelection = ""
         for s in range(len(selections)-1):
             finalSelection = finalSelection+selectionType+str(selections[s])+" or "
         finalSelection =finalSelection+selectionType+str(selections[-1])
-        print finalSelection
-        return finalSelection
        
+        return finalSelection
+    
+    
+    def _extensionDcD(self, trajectoryFile):
+        '''This function asserts whether the input trajectory file is in dcd format or not.
+            
+        Args:
+           _trajectoryFile (str): trajectoryFilename.xtc/trajectoryFilename.dcd
+          
+    
+        Returns:
+           boolean  true, if trajectory file is in dcd format
+    
+    
+        Useage:
+    
+        >>> if == self._extensionDcD('test.dcd) 
+        
+        '''  
+        fileName, fileExtension = os.path.splitext(trajectoryFile)
+        if fileExtension == '.dcd':
+            return True
+        else:
+            return False
                 
 #=============================================================================================
 # MAIN AND TESTS
 #=============================================================================================
 
 if __name__ == "__main__":
-    print 'Hello angle word'
+    
     
 #tsting the methods
     parser = argparse.ArgumentParser(description="Feature extractions from xtc files")
@@ -131,8 +267,11 @@ if __name__ == "__main__":
     topologyFile = args.c
     trajectoryFile = args.f
     a = Angles()
-    angleArray = np.array([1169, 423, 279, 117])
-    theta = a.getDihedralAngle(topologyFile,trajectoryFile,angleArray)
-    print theta
+    #angleArray = np.array([1169, 423, 279, 117])
+    angleArray = np.array([279,423,1169])
+    #theta = a.getDihedralAngle(topologyFile,trajectoryFile,angleArray)
+    traj = a.getAngleTrajectory(topologyFile, trajectoryFile, angleArray)
+    print traj
+
 
         
