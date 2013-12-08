@@ -38,6 +38,8 @@ from MDAnalysis import *
 from MDAnalysis.analysis.distances import *
 import numpy as np
 import argparse
+from MDAnalysis import collection
+import os
 
 
 #=============================================================================================
@@ -58,7 +60,7 @@ class distances:
         pass
     
         
-    def returnCAlphaDistanceTrajectory(self,_trajectoryFile, _topologyFile, skip = 2):
+    def getCAlphaDistanceTrajectory(self,_trajectoryFile, _topologyFile, skip = 2):
         '''This function returns next to nearest neighbour c-alpha distances
     
         Args:
@@ -74,16 +76,16 @@ class distances:
         >>> distances = returnCAlphaDistances(_trajectoryFile='test.xtc', _topologyFile='test.gro')
         
         '''  
-        universe = Universe(_topologyFile,_trajectoryFile)
+        u = Universe(_topologyFile,_trajectoryFile)
         print "Loading trajectory file %s"%_trajectoryFile
-        protein = universe.selectAtoms("protein") #Selecting only protein atoms
-        nframes = universe.trajectory.numframes - 1
-        calphas = universe.selectAtoms("name CA")
+        protein = u.selectAtoms("protein") #Selecting only protein atoms
+        nframes = u.trajectory.numframes - 1
+        calphas = u.selectAtoms("name CA")
         atomnums = calphas.atoms.indices()
     
         distance_selections = []
         for k in range(len(atomnums)):
-            idist = universe.selectAtoms("bynum %i"%atomnums[k])
+            idist = u.selectAtoms("bynum %i"%atomnums[k])
             distance_selections.append(idist)
         ndist = len(distance_selections)
 
@@ -98,20 +100,78 @@ class distances:
                         all_distances.append( result[2][0])
                         
             distanceListTrajectory.append(all_distances)
-            universe.trajectory.next()
+            u.trajectory.next()
         print 'distance Trajectory has been obtained.'
         return distanceListTrajectory
     
     
-    def RetrunCAlphaDistanceTrajectoryParallel(self):
+    def getCAlphaDistanceTrajectoryParallel(self):
         print 'this method has not been implemented yet'
     
-    def ReturnHeavyAtromDistanceTrajectory(self):
+    def getHeavyAtromDistanceTrajectory(self):
         print 'this method is not implemented yet'
         
-    def ReturnCustomDistances(self):
-        print 'this method is not implemented yet'
+    def getCustomDistancesTrajectory(self, _topologyFile,_trjectoryFile, _atomsArray,_stop=-1):
+        u = Universe(_topologyFile,_trjectoryFile)
+        if self._extensionDcD(_trjectoryFile):
+            collection.clear()
+            selections = []
+            for l in range(len(_atomsArray)):
+                selectionString =self._generateSelectionString(_atomsArray[l], "bynum ")
+                s = u.selectAtoms(selectionString)
+                selections.append(s)
+                print s 
+            for s in selections:
+                print s
+                collection.addTimeseries(Timeseries.Distance('r',s))
+            if _stop == -1:
+                _stop = u.trajectory.numframes-1
+            collection.compute(u.trajectory, stop=_stop)
+            return collection
+            
+        
+        
+        else:
+         
+            print 'blub'
     
+    
+    def _generateSelectionString(self, selections, selectionType):
+  
+        finalSelection = ""
+        print selections
+        if len(selections)>2:
+            for s in range(len(selections)-1):
+                finalSelection = finalSelection+selectionType+str(selections[s])+" or "
+            finalSelection =finalSelection+selectionType+str(selections[-1])
+        else:
+            finalSelection = finalSelection+selectionType+str(selections[0])+" or "
+            finalSelection =finalSelection+selectionType+str(selections[1])
+        print finalSelection
+        return finalSelection
+    
+    
+    def _extensionDcD(self, trajectoryFile):
+        '''This function asserts whether the input trajectory file is in dcd format or not.
+            
+        Args:
+           _trajectoryFile (str): trajectoryFilename.xtc/trajectoryFilename.dcd
+          
+    
+        Returns:
+           boolean  true, if trajectory file is in dcd format
+    
+    
+        Useage:
+    
+        >>> if == self._extensionDcD('test.dcd) 
+        
+        '''  
+        fileName, fileExtension = os.path.splitext(trajectoryFile)
+        if fileExtension == '.dcd':
+            return True
+        else:
+            return False
         
 #=============================================================================================
 # MAIN AND TESTS
@@ -128,6 +188,8 @@ if __name__ == "__main__":
     topologyFile = args.c
     trajectoryFile = args.f
     d = distances()
-    d.thisIsAPublicMethod()
-    distances = d.returnCAlphaDistanceTrajectory(trajectoryFile, topologyFile, 2)
-    print distances
+
+    atomsArray = np.array([[423,1169]])
+    #distances = d.getCAlphaDistanceTrajectory(trajectoryFile, topologyFile, 2)
+    distances = d.getCustomDistancesTrajectory(topologyFile, trajectoryFile, atomsArray)
+    print distances[0]
