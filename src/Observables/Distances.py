@@ -115,7 +115,20 @@ class distances(observable):
 #         print 'distance Trajectory has been obtained.'
 #         return distanceListTrajectory
     
-    
+    def get_custom_distances_trajectory_with_pbc(self, _atomsArray,_stop=-1):
+       
+        atom1 = self._u.selectAtoms("bynum "+str(_atomsArray[0][0]))
+        atom2 = self._u.selectAtoms("bynum "+str(_atomsArray[0][1]))
+        distList = []
+        for ts in self._u.trajectory:
+            box = ts.dimensions[:3]
+            coords1 = atom1.coordinates()
+            coords2 = atom2.coordinates()
+            dist = distance_array(coords1, coords2, box)
+            distList.append(dist)
+        return distList
+        
+        
     def get_calpha_distance_trajectory_parallel(self):
         print 'this method has not been implemented yet'
     
@@ -168,8 +181,12 @@ if __name__ == "__main__":
     d = distances(topologyFile,trajectoryFile)
 
     atomsArray = np.array([[423,1169]])
-    dists = d.get_calpha_distance_trajectory(4, _stop=20)
-    np.savetxt('test.dat', dists)
-    
+    #dists = d.get_custom_distances_trajectory(atomsArray, _stop=20)
+    #print dists
+    #np.savetxt('test.dat', dists)
+    dists = d.get_custom_distances_trajectory_with_pbc(atomsArray, _stop=10)
+    dists = np.array(dists)
+    dists = dists.flatten()
+    np.savetxt('test2.dat', dists)
     #Distances = d.get_custom_distances_trajectory( atomsArray)
     #print Distances[0]
