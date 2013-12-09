@@ -41,7 +41,7 @@ import os
 from MDAnalysis import collection
 from Observable import observable
 
-class Angles(observable):
+class angles(observable):
     '''
     classdocs
     '''
@@ -274,7 +274,7 @@ if __name__ == "__main__":
  
     topologyFile = args.c
     trajectoryFile = args.f
-    a = Angles(topologyFile, trajectoryFile)
+    a = angles(topologyFile, trajectoryFile)
     
     angleArray = np.array([279,423,1169])
     print a.get_angle(angleArray)

@@ -46,7 +46,7 @@ from Observable import observable
 # Distances class definition
 #=============================================================================================
 
-class Distances(observable):
+class distances(observable):
     '''
     This class extracts Distances of all kinds from a trajectory and topology file\n
     prerequesit modules are: MDAnalysis
@@ -165,7 +165,7 @@ if __name__ == "__main__":
 
     topologyFile = args.c
     trajectoryFile = args.f
-    d = Distances(topologyFile,trajectoryFile)
+    d = distances(topologyFile,trajectoryFile)
 
     atomsArray = np.array([[423,1169]])
     dists = d.get_calpha_distance_trajectory(4, _stop=20)
