@@ -58,6 +58,7 @@ class Angles(observable):
             none
             
         Usage:
+        
         >>> d = distance('topologyFile.gro', 'trajectoryFile.xtc/dcd')
         '''
         observable.__init__(self, topologyFile, trajectoryFile)
@@ -133,7 +134,7 @@ class Angles(observable):
         
       
         
-        if self.extensionDcD(self._trajectoryFile):
+        if self.extension_DcD(self._trajectoryFile):
             collection.clear()
             selectionString =self.generate_selection_string(atomSelectionArray, "bynum ")
             selection = self._u.selectAtoms(selectionString)
@@ -190,7 +191,7 @@ class Angles(observable):
         #if filename is a dcd file use fast method
       
         
-        if self.extensionDcD(self._trajectoryFile):
+        if self.extension_DcD(self._trajectoryFile):
             collection.clear()
             selectionString =self.generate_selection_string(atomSelectionArray, "bynum ")
             selection = self._u.selectAtoms(selectionString)

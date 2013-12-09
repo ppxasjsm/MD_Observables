@@ -64,6 +64,7 @@ class Distances(observable):
             none
             
         Usage:
+        
         >>> d = distance('topologyFile.gro', 'trajectoryFile.xtc/dcd')
         '''
         observable.__init__(self, topologyFile, trajectoryFile)
@@ -81,7 +82,7 @@ class Distances(observable):
            arrayList  Distances array for the whole trajectory [traj_length][num_c_alpha_distances]
     
     
-        Useage
+        Useage:
     
         >>> Distances = returnCAlphaDistances(_trajectoryFile='test.xtc', _topologyFile='test.gro')
         
@@ -121,9 +122,8 @@ class Distances(observable):
         print 'this method is not implemented yet'
         
     def get_custom_distances_trajectory(self,  _atomsArray,_stop=-1):
-        print self._u
-        #u = Universe(_topologyFile,_trjectoryFile)
-        if self.extensionDcD(self._trajectoryFile):
+        
+        if self.extension_DcD(self._trajectoryFile):
             collection.clear()
             selections = []
             for l in range(len(_atomsArray)):
