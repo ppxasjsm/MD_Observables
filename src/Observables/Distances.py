@@ -72,7 +72,7 @@ class Distances(observable):
         self._trajectoryFile = trajectoryFile
     
         
-    def get_calpha_distance_trajectory(self, skip = 2):
+    def get_calpha_distance_trajectory(self, skip = 2, _stop =-1):
         '''This function returns next to nearest neighbour c-alpha Distances
     
         Args:
@@ -88,31 +88,32 @@ class Distances(observable):
         
         '''  
 
-        protein = self._u.selectAtoms("protein") #Selecting only protein atoms
-        nframes = self._u.trajectory.numframes - 1
+
         calphas = self._u.selectAtoms("name CA")
         atomnums = calphas.atoms.indices()
-    
-        distance_selections = []
-        for k in range(len(atomnums)):
-            idist = self._u.selectAtoms("bynum %i"%atomnums[k])
-            distance_selections.append(idist)
-        ndist = len(distance_selections)
 
-        distanceListTrajectory = []
+        distanceSelections = []
+        for k in range(len(atomnums)-skip):
+            for l in range(k+skip,len(atomnums)):
+                a = np.array([atomnums[k], atomnums[l]])
+                distanceSelections.append(a)
+      
+        distanceSelections = np.array(distanceSelections)
+        return self.get_custom_distances_trajectory(distanceSelections, _stop)
+   
         # Loop over all frames:
-        print "Loop over all frames..."
-        for i in range(nframes):
-            all_distances = []
-            for k in range(ndist-skip):
-                for l in range(k+skip,ndist):
-                        result = dist(distance_selections[k],distance_selections[l])
-                        all_distances.append( result[2][0])
-                        
-            distanceListTrajectory.append(all_distances)
-            self._u.trajectory.next()
-        print 'distance Trajectory has been obtained.'
-        return distanceListTrajectory
+#         print "Loop over all frames..."
+#         for i in range(nframes):
+#             all_distances = []
+#             for k in range(ndist-skip):
+#                 for l in range(k+skip,ndist):
+#                         result = dist(distance_selections[k],distance_selections[l])
+#                         all_distances.append( result[2][0])
+#                         
+#             distanceListTrajectory.append(all_distances)
+#             self._u.trajectory.next()
+#         print 'distance Trajectory has been obtained.'
+#         return distanceListTrajectory
     
     
     def get_calpha_distance_trajectory_parallel(self):
@@ -130,14 +131,16 @@ class Distances(observable):
                 selectionString =self.generate_selection_string(_atomsArray[l], "bynum ")
                 s = self._u.selectAtoms(selectionString)
                 selections.append(s)
-                print s 
+              
             for s in selections:
-                print s
+              
                 collection.addTimeseries(Timeseries.Distance('r',s))
             if _stop == -1:
                 _stop = self._u.trajectory.numframes-1
             collection.compute(self._u.trajectory, stop=_stop)
-            return collection
+            distances = np.array(collection)
+            distances = distances[:,0,:].transpose()
+            return distances
             
         
         
@@ -146,42 +149,7 @@ class Distances(observable):
             print 'blub'
     
     
-#     def _generate_selection_string(self, selections, selectionType):
-#   
-#         finalSelection = ""
-#         print selections
-#         if len(selections)>2:
-#             for s in range(len(selections)-1):
-#                 finalSelection = finalSelection+selectionType+str(selections[s])+" or "
-#             finalSelection =finalSelection+selectionType+str(selections[-1])
-#         else:
-#             finalSelection = finalSelection+selectionType+str(selections[0])+" or "
-#             finalSelection =finalSelection+selectionType+str(selections[1])
-#         print finalSelection
-#         return finalSelection
-    
-    
-#     def _extensionDcD(self, trajectoryFile):
-#         '''This function asserts whether the input trajectory file is in dcd format or not.
-#             
-#         Args:
-#            _trajectoryFile (str): trajectoryFilename.xtc/trajectoryFilename.dcd
-#           
-#     
-#         Returns:
-#            boolean  true, if trajectory file is in dcd format
-#     
-#     
-#         Useage:
-#     
-#         >>> if == self._extensionDcD('test.dcd) 
-#         
-#         '''  
-#         fileName, fileExtension = os.path.splitext(trajectoryFile)
-#         if fileExtension == '.dcd':
-#             return True
-#         else:
-#             return False
+
         
 #=============================================================================================
 # MAIN AND TESTS
@@ -200,6 +168,8 @@ if __name__ == "__main__":
     d = Distances(topologyFile,trajectoryFile)
 
     atomsArray = np.array([[423,1169]])
-    #Distances = d.get_calpha_distance_trajectory(trajectoryFile, topologyFile, 2)
-    Distances = d.get_custom_distances_trajectory( atomsArray)
-    print Distances[0]
+    dists = d.get_calpha_distance_trajectory(4, _stop=20)
+    np.savetxt('test.dat', dists)
+    
+    #Distances = d.get_custom_distances_trajectory( atomsArray)
+    #print Distances[0]

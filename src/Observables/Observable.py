@@ -93,7 +93,7 @@ class observable(object):
         
         '''
         finalSelection = ""
-        print selections
+        
         if len(selections)>2:
             for s in range(len(selections)-1):
                 finalSelection = finalSelection+selectionType+str(selections[s])+" or "
@@ -101,7 +101,7 @@ class observable(object):
         else:
             finalSelection = finalSelection+selectionType+str(selections[0])+" or "
             finalSelection =finalSelection+selectionType+str(selections[1])
-        print finalSelection
+   
         return finalSelection
         
         
