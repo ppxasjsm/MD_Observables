@@ -28,7 +28,8 @@
     #=============================================================================================
 
 '''
-from MDAnalysis import *
+#from MDAnalysis import *
+import MDAnalysis
 import os
 
 class observable(object):
@@ -51,7 +52,7 @@ class observable(object):
         
         >>> d = distance('topologyFile.gro', 'trajectoryFile.xtc/dcd')
         '''
-        self._u =  Universe(topologyFile,trajectoryFile)
+        self._u =  MDAnalysis.Universe(topologyFile,trajectoryFile)
         
     def extension_DcD(self, trajectoryFile):
         '''This function asserts whether the input trajectory file is in dcd format or not.

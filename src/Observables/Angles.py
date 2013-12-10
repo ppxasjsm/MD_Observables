@@ -37,7 +37,6 @@ from MDAnalysis import *
 from MDAnalysis.analysis.distances import *
 import numpy as np
 import argparse
-import os
 from MDAnalysis import collection
 from Observable import observable
 
@@ -83,7 +82,7 @@ class angles(observable):
         
         '''  
         
-       # u = Universe(_structure,_trajectory)
+       
         selectionString =self.generate_selection_string(atomSelectionArray, "bynum ")
         selection = self._u.selectAtoms(selectionString)
         angle = selection.angle()
@@ -147,23 +146,19 @@ class angles(observable):
         
                #else
         else:
-            print 'Warning.....first frame is missing............................'
-            print 'You have not provided a dcd file, iterating through the trajectory will be slow. '
-            print 'For improved preformance please convert your input trajectory to dcd format.'
-            print 'Good luck with the compuatation'
+            print "Using frame iteration and not collections module"
             frames = self._u.trajectory.numframes
             dihedrals = []
-            self._u.trajectory.rewind()
-            for t in range(frames-1):
-               
-                selectionString =self.generate_selection_string(atomSelectionArray, "bynum ")
-                selection = self._u.selectAtoms(selectionString)
-                dihedral = selection.dihedral()
-                dihedrals.append(dihedral)
-                self._u.trajectory.next()
             selectionString =self.generate_selection_string(atomSelectionArray, "bynum ")
             selection = self._u.selectAtoms(selectionString)
-            dihedral = selection.dihedral()
+            count = 0;
+            for ts in self._u.trajectory:    
+                if count ==_stop:
+                    break           
+               
+                dihedral = selection.dihedral()
+                dihedrals.append(dihedral)
+                count = count+1
             dihedrals.append(dihedral)
             dihedrals = np.array(dihedrals)
             dihedrals = np.radians(dihedrals)
@@ -204,60 +199,24 @@ class angles(observable):
         
         #else
         else:
-            print 'Warning.......warning first frame is missing....................................'
-            print 'You have not provided a dcd file, iterating through the trajectory will be slow. '
-            print 'For improved preformance please convert your input trajectory to dcd format.'
-            print 'Good luck with the compuatation'
+            print "Using frame iteration and not collections module"
             frames = self._u.trajectory.numframes-1
             angles = []
-           
-            for t in range(frames):
-                
-                selectionString =self.generate_selection_string(atomSelectionArray, "bynum ")
-                selection = self._u.selectAtoms(selectionString)
-                angle = selection.angle()
-                angles.append(angle)
-                self._u.trajectory.next()
             selectionString =self.generate_selection_string(atomSelectionArray, "bynum ")
             selection = self._u.selectAtoms(selectionString)
-            angle = selection.angle()
-            angles.append(angle)
+            count =0
+            for ts in self._u.trajectory:
+                if count == _stop:
+                    break
+
+                angle = selection.angle()
+                angles.append(angle)
+                count = count+1
             angles = np.array(angles)
             angles = np.radians(angles)
             return angles
                 
-        
-    def _generate_selection_string(self, selections, selectionType):
-  
-        finalSelection = ""
-        for s in range(len(selections)-1):
-            finalSelection = finalSelection+selectionType+str(selections[s])+" or "
-        finalSelection =finalSelection+selectionType+str(selections[-1])
-       
-        return finalSelection
-    
-    
-    def _extensionDcD(self, trajectoryFile):
-        '''This function asserts whether the input trajectory file is in dcd format or not.
-            
-        Args:
-           _trajectoryFile (str): trajectoryFilename.xtc/trajectoryFilename.dcd
-          
-    
-        Returns:
-           boolean  true, if trajectory file is in dcd format
-    
-    
-        Useage:
-    
-        >>> if == self._extensionDcD('test.dcd) 
-        
-        '''  
-        fileName, fileExtension = os.path.splitext(trajectoryFile)
-        if fileExtension == '.dcd':
-            return True
-        else:
-            return False
+
                 
 #=============================================================================================
 # MAIN AND TESTS
