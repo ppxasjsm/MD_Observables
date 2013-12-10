@@ -158,9 +158,30 @@ class distances(observable):
         
         
         else:
-         
-            print 'blub'
-    
+            selectionsList = []
+            for atoms in _atomsArray:
+                selection=[]
+                selection.append(self._u.selectAtoms("bynum "+str(atoms[0]))) 
+                selection.append(self._u.selectAtoms("bynum "+str(atoms[1])))
+                selectionsList.append(selection)
+            
+            count = 0
+            allDist = []
+            for ts in self._u.trajectory:
+                if count == _stop:
+                    break
+                distArray = []
+                for s in selectionsList:
+                    var = dist(s[0], s[1])
+                    print var[2]
+                    distArray.append(var[2])
+                allDist.append(distArray)
+                count = count+1
+            allDist = np.array(allDist)
+            allDist = allDist[:,:,0]
+            return allDist
+              
+
     
 
         
@@ -184,9 +205,10 @@ if __name__ == "__main__":
     #dists = d.get_custom_distances_trajectory(atomsArray, _stop=20)
     #print dists
     #np.savetxt('test.dat', dists)
-    dists = d.get_custom_distances_trajectory_with_pbc(atomsArray, _stop=10)
-    dists = np.array(dists)
-    dists = dists.flatten()
+    #dists = d.get_custom_distances_trajectory_with_pbc(atomsArray, _stop=2)
+    dists = d.get_calpha_distance_trajectory(2, 2)
+    #dists = np.array(dists)
+    #dists = dists.flatten()
     np.savetxt('test2.dat', dists)
     #Distances = d.get_custom_distances_trajectory( atomsArray)
     #print Distances[0]
