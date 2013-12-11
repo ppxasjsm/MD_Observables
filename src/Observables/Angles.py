@@ -159,7 +159,7 @@ class angles(observable):
                 if count ==_stop:
                     break
                 count = count+1
-            dihedrals.append(dihedral)
+            
             dihedrals = np.array(dihedrals)
             dihedrals = np.radians(dihedrals)
             return dihedrals
