@@ -173,7 +173,6 @@ class distances(observable):
                 distArray = []
                 for s in selectionsList:
                     var = dist(s[0], s[1])
-                    print var[2]
                     distArray.append(var[2])
                 allDist.append(distArray)
                 count = count+1
@@ -191,7 +190,7 @@ class distances(observable):
 
 if __name__ == "__main__":
     
-    #tsting the methods
+    #testing the methods
     parser = argparse.ArgumentParser(description="Feature extractions from xtc files")
     parser.add_argument('-f', help='xtc inputfile');
     parser.add_argument('-c', help='coordinate file in Gromacs .gro format');

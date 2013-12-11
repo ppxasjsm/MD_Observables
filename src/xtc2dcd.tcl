@@ -1,4 +1,4 @@
-#vmd -dispdev none -eofexit -e xtc2dcd.tcl test.gro test.xtc test.dcd
+#vmd -dispdev none -eofexit -e xtc2dcd.tcl -args test.gro test.xtc test.dcd
 
 # disable unnecessary options
 display update off

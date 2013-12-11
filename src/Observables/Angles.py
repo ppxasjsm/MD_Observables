@@ -225,7 +225,7 @@ class angles(observable):
 if __name__ == "__main__":
     
     
-#tsting the methods
+#testing the methods
     parser = argparse.ArgumentParser(description="Feature extractions from xtc files")
     parser.add_argument('-f', help='xtc inputfile');
     parser.add_argument('-c', help='coordinate file in Gromacs .gro format');
