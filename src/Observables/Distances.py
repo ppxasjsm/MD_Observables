@@ -168,13 +168,13 @@ class distances(observable):
             count = 0
             allDist = []
             for ts in self._u.trajectory:
-                if count == _stop:
-                    break
                 distArray = []
                 for s in selectionsList:
                     var = dist(s[0], s[1])
                     distArray.append(var[2])
                 allDist.append(distArray)
+                if count == _stop:
+                    break
                 count = count+1
             allDist = np.array(allDist)
             allDist = allDist[:,:,0]

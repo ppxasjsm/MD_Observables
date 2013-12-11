@@ -152,12 +152,12 @@ class angles(observable):
             selectionString =self.generate_selection_string(atomSelectionArray, "bynum ")
             selection = self._u.selectAtoms(selectionString)
             count = 0;
-            for ts in self._u.trajectory:    
-                if count ==_stop:
-                    break           
+            for ts in self._u.trajectory:           
                
                 dihedral = selection.dihedral()
                 dihedrals.append(dihedral)
+                if count ==_stop:
+                    break
                 count = count+1
             dihedrals.append(dihedral)
             dihedrals = np.array(dihedrals)
